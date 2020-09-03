@@ -1,6 +1,10 @@
 // const express = require('express');
 import express from "express";
-import morgan from "morgan";//logger은 morgan nickname으로 불린다
+import morgan from "morgan";
+import helmet from "helmet";
+import cookieParser from "cookie-parser";
+import bodyParser, { urlencoded } from "body-parser";
+
 import { restart } from "nodemon";
 const app = express();
 
@@ -13,15 +17,13 @@ const handleHome = (req,res) => res.send('hello from ringgu');
 
 const handleProfile = (req,res) => res.send('you are on my profile');
 
-const betweenHome = (req, res, next) => {
-    console.log("Between");
-    next();
-};
-
-app.use(betweenHome);
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(helmet());
+app.use(morgan("dev"));
 
 app.get("/", handleHome);
 
 app.get("/profile",handleProfile);
 
-app.listen(PORT, handleListening);
