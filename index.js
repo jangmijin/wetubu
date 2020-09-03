@@ -1,22 +1,26 @@
-const express = require('express');
+// const express = require('express');
+import express from "express";
+import morgan from "morgan";//logger은 morgan nickname으로 불린다
+import { restart } from "nodemon";
 const app = express();
 
 const PORT = 4000;
 
-function handleListening() {
+const handleListening = () => 
     console.log(`Listening on: http://localhost:${PORT}`);
-}
 
-function handleHome(req,res) {
-    console.log(req);
-    res.send('hello from home');
-}
+const handleHome = (req,res) => res.send('hello from ringgu');
 
-function handleProfile(req,res) {
-    res.send('you are on my profile');
-}
+const handleProfile = (req,res) => res.send('you are on my profile');
 
-app.get("/",handleHome);
+const betweenHome = (req, res, next) => {
+    console.log("Between");
+    next();
+};
+
+app.use(betweenHome);
+
+app.get("/", handleHome);
 
 app.get("/profile",handleProfile);
 
